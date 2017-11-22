@@ -74,3 +74,5 @@ function resetDeck(cardList) {
 function resetGame() {
     resetDeck(cardList);
 }
+
+window.onload = resetGame()
