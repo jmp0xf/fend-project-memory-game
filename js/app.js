@@ -39,7 +39,7 @@ function shuffle(array) {
     return array;
 }
 
-var Deck = function(cards) {
+var Deck = function (cards) {
     this.cardList = cards.concat(cards);
     this.node = document.getElementsByClassName("deck")[0];
 
@@ -50,7 +50,7 @@ var Deck = function(cards) {
     this.cardBaseItem.appendChild(icon);
 };
 
-Deck.prototype.reset = function() {
+Deck.prototype.reset = function () {
     // Clear open card list
     openCardList = [];
 
@@ -61,7 +61,7 @@ Deck.prototype.reset = function() {
     var shuffledList = shuffle(this.cardList);
 
     // Add each card's HTML to the deck node
-    shuffledList.forEach(function(card) {
+    shuffledList.forEach(function (card) {
         var cardItem = this.cardBaseItem.cloneNode(true);
         cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
         cardItem.onclick = cardClickListener;
@@ -143,7 +143,7 @@ function cardClickListener() {
     var len = openList.length;
 
     // If first card clicked, start the timer
-    if (len==1) {
+    if (len == 1) {
         game.resetTimer();
     }
 
@@ -174,34 +174,34 @@ function cardClickListener() {
 /*
  * Move counter
  */
-var MoveCounter = function(scorePanel) {
+var MoveCounter = function (scorePanel) {
     this.moveCount = 0;
     this.movesLabel = document.getElementsByClassName("moves")[0];
     this.scorePanel = scorePanel;
 };
 
-MoveCounter.prototype.refresh = function() {
+MoveCounter.prototype.refresh = function () {
     this.movesLabel.innerHTML = this.moveCount;
 };
 
-MoveCounter.prototype.reset = function() {
+MoveCounter.prototype.reset = function () {
     this.updateMoveCount(0);
 };
 
-MoveCounter.prototype.updateMoveCount = function(moveCount) {
+MoveCounter.prototype.updateMoveCount = function (moveCount) {
     this.moveCount = moveCount;
     this.refresh();
     this.scorePanel.calcScore(moveCount);
 };
 
-MoveCounter.prototype.incMoveCount = function() {
-    this.updateMoveCount(this.moveCount+1);
+MoveCounter.prototype.incMoveCount = function () {
+    this.updateMoveCount(this.moveCount + 1);
 };
 
 /*
  * Score panel
  */
-var ScorePanel = function() {
+var ScorePanel = function () {
     this.score = 0;
     this.starsNode = document.getElementsByClassName("stars")[0];
 
@@ -212,30 +212,30 @@ var ScorePanel = function() {
     this.starItem.appendChild(starIcon);
 };
 
-ScorePanel.prototype.refresh = function() {
+ScorePanel.prototype.refresh = function () {
     // Clear score panel stars
     this.starsNode.innerHTML = "";
 
     // Add each star HTML to the panel
-    for (var i=0; i<this.score; i++) {
+    for (var i = 0; i < this.score; i++) {
         this.starsNode.appendChild(this.starItem.cloneNode(true));
     }
 };
 
-ScorePanel.prototype.reset = function() {
+ScorePanel.prototype.reset = function () {
     this.updateScore(3);
 };
 
-ScorePanel.prototype.updateScore = function(score) {
+ScorePanel.prototype.updateScore = function (score) {
     this.score = score;
     this.refresh();
 };
 
 // Calculate the score in terms of move count
-ScorePanel.prototype.calcScore = function(move) {
-    if (move<16) {
+ScorePanel.prototype.calcScore = function (move) {
+    if (move < 16) {
         this.updateScore(3);
-    } else if (move<32) {
+    } else if (move < 32) {
         this.updateScore(2);
     } else {
         this.updateScore(1);
@@ -245,51 +245,51 @@ ScorePanel.prototype.calcScore = function(move) {
 /*
  * Timer
  */
-var Timer = function() {
+var Timer = function () {
     this.reset();
 };
 
-Timer.prototype.reset = function() {
+Timer.prototype.reset = function () {
     this.startTime = Date.now();
 };
 
-Timer.prototype.stop = function() {
+Timer.prototype.stop = function () {
     return (Date.now() - this.startTime) / 1000;
 };
 
 /*
  * Game engine
  */
-var Game = function(cards) {
+var Game = function (cards) {
     this.timer = new Timer();
     this.deck = new Deck(cards);
     this.scorePanel = new ScorePanel();
     this.moveCounter = new MoveCounter(this.scorePanel);
 };
 
-Game.prototype.reset = function() {
+Game.prototype.reset = function () {
     this.deck.reset();
     this.moveCounter.reset();
     this.scorePanel.reset();
 };
 
-Game.prototype.incMoveCount = function() {
+Game.prototype.incMoveCount = function () {
     this.moveCounter.incMoveCount();
 };
 
-Game.prototype.getMoveCount = function() {
+Game.prototype.getMoveCount = function () {
     return this.moveCounter.moveCount;
 };
 
-Game.prototype.getScore = function() {
+Game.prototype.getScore = function () {
     return this.scorePanel.score;
 };
 
-Game.prototype.resetTimer = function() {
+Game.prototype.resetTimer = function () {
     return this.timer.reset();
 };
 
-Game.prototype.getTime = function() {
+Game.prototype.getTime = function () {
     return this.timer.stop();
 };
 
