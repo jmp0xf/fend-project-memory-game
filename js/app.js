@@ -168,6 +168,9 @@ var Game = function (cards) {
     this.deck.setCardClickListener(this.makeCardClickListener(this));
     this.scorePanel = new ScorePanel();
     this.moveCounter = new MoveCounter(this.scorePanel);
+    // Reset button
+    this.resetButton = document.getElementsByClassName("restart")[0];
+    this.resetButton.onclick = this.reset.bind(this);
 };
 
 Game.prototype.reset = function () {
@@ -318,12 +321,6 @@ Game.prototype.makeCardClickListener = function (game) {
 
 // Initialize game engine
 var game = new Game(CARDS);
-
-/*
- * Reset button
- */
-var resetButton = document.getElementsByClassName("restart")[0];
-resetButton.onclick = game.reset.bind(game);
 
 /*
  * Reset the game after document is loaded
