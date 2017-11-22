@@ -149,6 +149,9 @@ function cardClickListener() {
     }
 }
 
+/*
+ * Move counter
+ */
 var moveCounter = document.getElementsByClassName("moves")[0];
 
 function displayMoveCounter() {
@@ -165,12 +168,21 @@ function incMoveCounter() {
     displayMoveCounter();
 }
 
+/*
+ * Global game function
+ */ 
 function resetGame() {
     resetDeck(cardList);
     resetMoveCounter();
 }
 
+/*
+ * Reset button
+ */
 var resetButton = document.getElementsByClassName("restart")[0];
 resetButton.onclick = resetGame;
 
+/*
+ * Reset the game after document is loaded
+ */
 window.onload = resetGame()
