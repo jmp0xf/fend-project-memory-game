@@ -184,43 +184,52 @@ function resetMoveCounter() {
 
 function incMoveCounter() {
     moveCount += 1;
-    updateScore(moveCount);
+    scorePanel.calcScore(moveCount);
     displayMoveCounter();
 }
 
 /*
  * Score panel
  */
-var score = 0;
-var scorePanelStars = document.getElementsByClassName("stars")[0];
+var ScorePanel = function() {
+    this.score = 0;
+    this.scorePanelStars = document.getElementsByClassName("stars")[0];
+    this.listItem = document.createElement("li");
+    this.starNode = document.createElement("i");
+    this.starNode.className = "fa fa-star";
+};
 
-function displayScore() {
+ScorePanel.prototype.displayScore = function() {
     // Clear score panel stars
-    scorePanelStars.innerHTML = "";
-    var listItem = document.createElement("li");
-    var starNode = document.createElement("i");
-    starNode.className = "fa fa-star";
-    for (var i=0; i<score; i++) {
-        scorePanelStars.appendChild(starNode.cloneNode(true));
+    this.scorePanelStars.innerHTML = "";
+
+    // Add each star HTML to the panel
+    for (var i=0; i<this.score; i++) {
+        this.scorePanelStars.appendChild(this.starNode.cloneNode(true));
     }
-}
+};
 
-function resetScore() {
-    score = 3;
-    displayScore();
-}
+ScorePanel.prototype.reset = function() {
+    this.updateScore(3);
+};
 
-// Update the score in terms of move count
-function updateScore(move) {
+ScorePanel.prototype.updateScore = function(score) {
+    this.score = score;
+    this.displayScore();
+};
+
+// Calculate the score in terms of move count
+ScorePanel.prototype.calcScore = function(move) {
     if (move<16) {
-        score = 3;
+        this.updateScore(3);
     } else if (move<32) {
-        score = 2;
+        this.updateScore(2);
     } else {
-        score = 1;
+        this.updateScore(1);
     }
-    displayScore();
-}
+};
+
+var scorePanel = new ScorePanel();
 
 /*
  * Timer
@@ -245,7 +254,7 @@ var timer = new Timer();
 function resetGame() {
     resetDeck(CARD_LIST);
     resetMoveCounter();
-    resetScore();
+    scorePanel.reset();
 }
 
 /*
