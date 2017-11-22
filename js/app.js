@@ -16,6 +16,7 @@ var CARDS = [
 ];
 
 var CARD_LIST = CARDS.concat(CARDS);
+var openCardList = [];
 
 /*
  * Display the cards on the page
@@ -98,8 +99,6 @@ function hideCard(cardNodes) {
         cardNode.className = "card";
     });
 }
-
-var openCardList = [];
 
 function addToOpenList(cardNode) {
     openCardList.push(cardNode);
