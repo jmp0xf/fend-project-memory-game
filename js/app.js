@@ -165,7 +165,7 @@ var Game = function (cards) {
     this.openCardList = [];
     this.timer = new Timer();
     this.deck = new Deck(cards);
-    this.deck.setCardClickListener(cardClickListener);
+    this.deck.setCardClickListener(this.makeCardClickListener(this));
     this.scorePanel = new ScorePanel();
     this.moveCounter = new MoveCounter(this.scorePanel);
 };
@@ -209,32 +209,36 @@ Game.prototype.getTime = function () {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-function showCard(cardNode) {
+Game.prototype.showCard = function (cardNode) {
     cardNode.className = "card open show";
-}
+};
 
-function lockCard(cardNodes) {
+Game.prototype.lockCard = function (cardNodes) {
     cardNodes.forEach(function (cardNode) {
         cardNode.className = "card match";
     });
-}
+};
 
-function highlightCard(cardNodes) {
+Game.prototype.highlightCard = function (cardNodes) {
     cardNodes.forEach(function (cardNode) {
         cardNode.className = "card not-match";
     });
-}
+};
 
-function hideCard(cardNodes) {
+Game.prototype.hideCard = function (cardNodes) {
     cardNodes.forEach(function (cardNode) {
         cardNode.className = "card";
     });
-}
+};
 
-function addToOpenList(cardNode) {
-    game.openCardList.push(cardNode);
-    return game.openCardList;
-}
+Game.prototype.addToOpenList = function (cardNode) {
+    this.openCardList.push(cardNode);
+};
+
+Game.prototype.getLastTwoOpenCards = function () {
+    var len = this.openCardList.length;
+    return this.openCardList.slice(len - 2, len);
+};
 
 /*
  * Process the two unmatched cards:
@@ -242,61 +246,75 @@ function addToOpenList(cardNode) {
  *  - highlight the two unmatched cards
  *  - hide the two unmatched cards
  */
-function processUnmatchedCards(openList) {
-    var len = game.openCardList.length;
-    var cardNodes = openList.slice(len - 2, len);
-    game.openCardList = openList.slice(0, len - 2);
-    highlightCard(cardNodes);
-    setTimeout(hideCard, 500, cardNodes);
-}
+Game.prototype.processUnmatchedCards = function () {
+    var len = this.openCardList.length;
+    var cardNodes = this.openCardList.slice(len - 2, len);
+    this.openCardList = this.openCardList.slice(0, len - 2);
+    this.highlightCard(cardNodes);
+    setTimeout(this.hideCard, 500, cardNodes);
+};
 
-function matchCards(cardNodes) {
+Game.prototype.matchCards = function (cardNodes) {
     return cardNodes[0].getElementsByTagName("i")[0].className === cardNodes[1].getElementsByTagName("i")[0].className;
 
-}
+};
 
-function cardClickListener() {
-    // Only process hidden card
-    if (this.className !== "card") {
-        return;
-    }
+Game.prototype.isFinished = function () {
+    return this.openCardList.length == 16;
+};
 
-    // Display card's symbol
-    showCard(this);
-
-    // Add card node to open card list
-    var openList = addToOpenList(this);
-
-    var len = openList.length;
-
+Game.prototype.autoSetupTimer = function () {
     // If first card clicked, start the timer
-    if (len === 1) {
-        game.resetTimer();
+    if (this.openCardList === 1) {
+        this.resetTimer();
     }
+};
 
-    if (len % 2 === 0) {
-        var cardNodes = openList.slice(len - 2, len);
+Game.prototype.isOpenCard = function (cardNode) {
+    return cardNode.className !== "card"
+};
 
-        // Check if the two cards match
-        if (matchCards(cardNodes)) {
-            lockCard(cardNodes);
-        } else {
-            processUnmatchedCards(openList);
+Game.prototype.makeCardClickListener = function (game) {
+    return function () {
+        game.autoSetupTimer();
+
+        // Only process hidden card
+        if (game.isOpenCard(this)) {
+            return;
         }
-        game.incMoveCount();
-    }
-    if (openList.length === 16) {
-        var again = confirm(
-            "Congratulations! You Won!\n" +
-            "With " + game.getMoveCount() + " Moves and " + game.getScore() + " Stars in " + game.getTime() + " Secs.\n" +
-            "Woooooo!\n" +
-            "Play again?"
-        );
-        if (again) {
-            game.reset();
+
+        // Display card's symbol
+        game.showCard(this);
+
+        // Add card node to open card list
+        game.addToOpenList(this);
+
+        var cnt = game.openCardList.length;
+
+        if (cnt % 2 === 0) {
+            var cardNodes = game.getLastTwoOpenCards();
+
+            // Check if the two cards match
+            if (game.matchCards(cardNodes)) {
+                game.lockCard(cardNodes);
+            } else {
+                game.processUnmatchedCards();
+            }
+            game.incMoveCount();
+        }
+        if (game.isFinished()) {
+            var again = confirm(
+                "Congratulations! You Won!\n" +
+                "With " + game.getMoveCount() + " Moves and " + game.getScore() + " Stars in " + game.getTime() + " Secs.\n" +
+                "Woooooo!\n" +
+                "Play again?"
+            );
+            if (again) {
+                game.reset();
+            }
         }
     }
-}
+};
 
 // Initialize game engine
 var game = new Game(CARDS);
