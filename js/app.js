@@ -90,6 +90,7 @@ function incMoveCounter() {
 
 function resetGame() {
     resetDeck(cardList);
+    resetMoveCounter();
 }
 
 window.onload = resetGame()
