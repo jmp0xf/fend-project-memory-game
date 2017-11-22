@@ -4,7 +4,7 @@
  * Create a list that holds all of your cards
  */
 
-var cards = [
+var CARDS = [
     "diamond",
     "paper-plane-o",
     "anchor",
@@ -15,7 +15,7 @@ var cards = [
     "bomb"
 ];
 
-var cardList = cards.concat(cards);
+var CARD_LIST = CARDS.concat(CARDS);
 
 /*
  * Display the cards on the page
@@ -210,7 +210,7 @@ function updateScore(move) {
  * Global game function
  */
 function resetGame() {
-    resetDeck(cardList);
+    resetDeck(CARD_LIST);
     resetMoveCounter();
     resetScore();
 }
