@@ -37,6 +37,28 @@ function shuffle(array) {
     return array;
 }
 
+function resetDeck(cardList) {
+    var deck = document.getElementsByClassName("deck")[0];
+    
+    // Clear card deck
+    deck.innerHTML = "";
+
+    // Create card item html node template
+    var cardBaseItem = document.createElement("li");
+    cardBaseItem.className = "card";
+    var icon = document.createElement("i");
+    cardBaseItem.appendChild(icon);
+
+    // Shuffle cards
+    var shuffledList = shuffle(cardList);
+
+    // Add each card's HTML to the deck node
+    for (var i = 0; i < shuffledList.length; i++) {
+        var cardItem = cardBaseItem.cloneNode(true);
+        cardItem.getElementsByTagName("i")[0].className = "fa fa-" + shuffledList[i];
+        deck.appendChild(cardItem);
+    }
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
