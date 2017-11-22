@@ -101,8 +101,6 @@ function addToOpenList(cardNode) {
     return openCardList;
 }
 
-var moveCount = 0;
-
 /* 
  * Process the two unmatched cards:
  *  - remove last two cards from open card list
@@ -152,6 +150,7 @@ function cardClickListener() {
 /*
  * Move counter
  */
+var moveCount = 0;
 var moveCounter = document.getElementsByClassName("moves")[0];
 
 function displayMoveCounter() {
