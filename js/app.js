@@ -2,6 +2,18 @@
  * Create a list that holds all of your cards
  */
 
+var cards = [
+    "diamond",
+    "paper-plane-o",
+    "anchor",
+    "bolt",
+    "cube",
+    "leaf",
+    "bicycle",
+    "bomb",
+]
+
+var cardList = cards.concat(cards)
 
 /*
  * Display the cards on the page
