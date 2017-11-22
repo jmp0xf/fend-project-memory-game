@@ -84,7 +84,7 @@ function lockCard(cardNodes) {
     });
 }
 
-function warnCard(cardNodes) {
+function highlightCard(cardNodes) {
     cardNodes.forEach(function (cardNode) {
         cardNode.className = "card not-match";
     });
@@ -113,7 +113,7 @@ function processUnmatchedCards(openList) {
     var len = openCardList.length;
     var cardNodes = openList.slice(len - 2, len);
     openCardList = openList.slice(0, len - 2);
-    warnCard(cardNodes);
+    highlightCard(cardNodes);
     setTimeout(hideCard, 500, cardNodes);
 }
 
