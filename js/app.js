@@ -168,7 +168,42 @@ function resetMoveCounter() {
 
 function incMoveCounter() {
     moveCount += 1;
+    updateScore(moveCount);
     displayMoveCounter();
+}
+
+/*
+ * Score panel
+ */
+var score = 0;
+var scorePanelStars = document.getElementsByClassName("stars")[0];
+
+function displayScore() {
+    // Clear score panel stars
+    scorePanelStars.innerHTML = "";
+    var listItem = document.createElement("li");
+    var starNode = document.createElement("i");
+    starNode.className = "fa fa-star";
+    for (var i=0; i<score; i++) {
+        scorePanelStars.appendChild(starNode.cloneNode(true));
+    }
+}
+
+function resetScore() {
+    score = 3;
+    displayScore();
+}
+
+// Update the score in terms of move count
+function updateScore(move) {
+    if (move<16) {
+        score = 3;
+    } else if (move<32) {
+        score = 2;
+    } else {
+        score = 1;
+    }
+    displayScore();
 }
 
 /*
@@ -177,6 +212,7 @@ function incMoveCounter() {
 function resetGame() {
     resetDeck(cardList);
     resetMoveCounter();
+    resetScore();
 }
 
 /*
