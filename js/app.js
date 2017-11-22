@@ -37,6 +37,10 @@ function shuffle(array) {
     return array;
 }
 
+/*
+ * Card deck
+ */
+
 var Deck = function (cards) {
     this.cardList = cards.concat(cards);
     this.node = document.getElementsByClassName("deck")[0];
