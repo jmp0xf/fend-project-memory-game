@@ -56,6 +56,7 @@ function resetDeck(cardList) {
     for (var i = 0; i < shuffledList.length; i++) {
         var cardItem = cardBaseItem.cloneNode(true);
         cardItem.getElementsByTagName("i")[0].className = "fa fa-" + shuffledList[i];
+        cardItem.onclick = cardClickListener;
         deck.appendChild(cardItem);
     }
 }
@@ -71,6 +72,82 @@ function resetDeck(cardList) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+function showCard(cardNode) {
+    cardNode.className = "card open show";
+}
+
+function lockCard(cardNodes) {
+    for (var i = 0; i < cardNodes.length; i++) {
+        cardNodes[i].className = "card match";
+    }
+}
+
+function warnCard(cardNodes) {
+    for (var i = 0; i < cardNodes.length; i++) {
+        cardNodes[i].className = "card not-match";
+    }
+}
+
+function hideCard(cardNodes) {
+    for (var i = 0; i < cardNodes.length; i++) {
+        cardNodes[i].className = "card";
+    }
+}
+
+var openCardList = []
+
+function addToOpenList(cardNode) {
+    openCardList.push(cardNode);
+    return openCardList;
+}
+
+var moveCount = 0;
+
+/* 
+ * Process the two unmatched cards:
+ *  - remove last two cards from open card list
+ *  - highlight the two unmatched cards
+ *  - hide the two unmatched cards
+ */
+function processUnmatchedCards(openList) {
+    var len = openCardList.length;
+    var cards = openList.slice(len - 2, len);
+    openCardList = openList.slice(0, len - 2);
+    warnCard(cards);
+    setTimeout(hideCard, 500, cards);
+}
+
+function matchCards(cardNodes) {
+    return cardNodes[0].getElementsByTagName("i")[0].className == cardNodes[1].getElementsByTagName("i")[0].className;
+
+}
+
+function cardClickListener() {
+    // Only process hidden card
+    if (this.className != "card") return;
+
+    // Display card's symbol
+    showCard(this);
+
+    // Add card node to open card list
+    var openList = addToOpenList(this);
+
+    var len = openList.length;
+    if (len % 2 == 0) {
+        var cards = openList.slice(len - 2, len);
+
+        // Check if the two cards match
+        if (matchCards(cards)) {
+            lockCard(cards);
+        } else {
+            processUnmatchedCards(openList);
+        }
+        incMoveCounter();
+    }
+    if (openList.length == 16) {
+        alert("Congratulations! You Won!");
+    }
+}
 
 var moveCounter = document.getElementsByClassName("moves")[0];
 
