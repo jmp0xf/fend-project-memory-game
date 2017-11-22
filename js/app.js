@@ -170,4 +170,7 @@ function resetGame() {
     resetMoveCounter();
 }
 
+var resetButton = document.getElementsByClassName("restart")[0];
+resetButton.onclick = resetGame;
+
 window.onload = resetGame()
