@@ -61,14 +61,12 @@ Deck.prototype.reset = function() {
     var shuffledList = shuffle(this.cardList);
 
     // Add each card's HTML to the deck node
-    shuffledList.forEach(function(deck) {
-        return function(card) {
-            var cardItem = deck.cardBaseItem.cloneNode(true);
-            cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
-            cardItem.onclick = cardClickListener;
-            deck.node.appendChild(cardItem);
-        };
-    }(this));
+    shuffledList.forEach(function(card) {
+        var cardItem = this.cardBaseItem.cloneNode(true);
+        cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
+        cardItem.onclick = cardClickListener;
+        this.node.appendChild(cardItem);
+    }.bind(this));
 };
 
 var deck = new Deck(CARDS);
