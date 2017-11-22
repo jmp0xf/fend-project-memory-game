@@ -40,6 +40,9 @@ function shuffle(array) {
 }
 
 function resetDeck(cardList) {
+    // Clear open card list
+    openCardList = [];
+
     var deck = document.getElementsByClassName("deck")[0];
 
     // Clear card deck
