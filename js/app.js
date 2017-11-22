@@ -15,7 +15,6 @@ var CARDS = [
     "bomb"
 ];
 
-var CARD_LIST = CARDS.concat(CARDS);
 var openCardList = [];
 
 /*
@@ -40,32 +39,39 @@ function shuffle(array) {
     return array;
 }
 
-function resetDeck(cardList) {
+var Deck = function(cards) {
+    this.cardList = cards.concat(cards);
+    this.node = document.getElementsByClassName("deck")[0];
+
+    // Create card item html node template
+    this.cardBaseItem = document.createElement("li");
+    this.cardBaseItem.className = "card";
+    var icon = document.createElement("i");
+    this.cardBaseItem.appendChild(icon);
+};
+
+Deck.prototype.reset = function() {
     // Clear open card list
     openCardList = [];
 
-    var deck = document.getElementsByClassName("deck")[0];
-
     // Clear card deck
-    deck.innerHTML = "";
-
-    // Create card item html node template
-    var cardBaseItem = document.createElement("li");
-    cardBaseItem.className = "card";
-    var icon = document.createElement("i");
-    cardBaseItem.appendChild(icon);
+    this.node.innerHTML = "";
 
     // Shuffle cards
-    var shuffledList = shuffle(cardList);
+    var shuffledList = shuffle(this.cardList);
 
     // Add each card's HTML to the deck node
-    shuffledList.forEach(function (card) {
-        var cardItem = cardBaseItem.cloneNode(true);
-        cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
-        cardItem.onclick = cardClickListener;
-        deck.appendChild(cardItem);
-    });
-}
+    shuffledList.forEach(function(deck) {
+        return function(card) {
+            var cardItem = deck.cardBaseItem.cloneNode(true);
+            cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
+            cardItem.onclick = cardClickListener;
+            deck.node.appendChild(cardItem);
+        };
+    }(this));
+};
+
+var deck = new Deck(CARDS);
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -262,7 +268,7 @@ var timer = new Timer();
  * Global game function
  */
 function resetGame() {
-    resetDeck(CARD_LIST);
+    deck.reset();
     moveCounter.reset();
     scorePanel.reset();
 }
