@@ -152,12 +152,12 @@ function cardClickListener() {
         } else {
             processUnmatchedCards(openList);
         }
-        incMoveCounter();
+        moveCounter.incMoveCount();
     }
     if (openList.length === 16) {
         var again = confirm(
             "Congratulations! You Won!\n" +
-            "With " + moveCount + " Moves and " + score + " Stars in " + timer.stop() + " Secs.\n" +
+            "With " + moveCounter.moveCount + " Moves and " + scorePanel.score + " Stars in " + timer.stop() + " Secs.\n" +
             "Woooooo!\n" +
             "Play again?"
         );
@@ -170,23 +170,30 @@ function cardClickListener() {
 /*
  * Move counter
  */
-var moveCount = 0;
-var moveCounter = document.getElementsByClassName("moves")[0];
+var MoveCounter = function() {
+    this.moveCount = 0;
+    this.movesLabel = document.getElementsByClassName("moves")[0];
+};
 
-function displayMoveCounter() {
-    moveCounter.innerHTML = moveCount;
-}
+MoveCounter.prototype.refresh = function() {
+    this.movesLabel.innerHTML = this.moveCount;
+};
 
-function resetMoveCounter() {
-    moveCount = 0;
-    displayMoveCounter();
-}
+MoveCounter.prototype.reset = function() {
+    this.updateMoveCount(0);
+};
 
-function incMoveCounter() {
-    moveCount += 1;
+MoveCounter.prototype.updateMoveCount = function(moveCount) {
+    this.moveCount = moveCount;
+    this.refresh();
     scorePanel.calcScore(moveCount);
-    displayMoveCounter();
-}
+};
+
+MoveCounter.prototype.incMoveCount = function() {
+    this.updateMoveCount(this.moveCount+1);
+};
+
+var moveCounter = new MoveCounter();
 
 /*
  * Score panel
@@ -256,7 +263,7 @@ var timer = new Timer();
  */
 function resetGame() {
     resetDeck(CARD_LIST);
-    resetMoveCounter();
+    moveCounter.reset();
     scorePanel.reset();
 }
 
