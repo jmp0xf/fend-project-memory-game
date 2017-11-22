@@ -137,6 +137,12 @@ function cardClickListener() {
     var openList = addToOpenList(this);
 
     var len = openList.length;
+
+    // If first card clicked, start the timer
+    if (len==1) {
+        timer.reset();
+    }
+
     if (len % 2 === 0) {
         var cardNodes = openList.slice(len - 2, len);
 
@@ -149,7 +155,15 @@ function cardClickListener() {
         incMoveCounter();
     }
     if (openList.length === 16) {
-        alert("Congratulations! You Won!");
+        var again = confirm(
+            "Congratulations! You Won!\n" +
+            "With " + moveCount + " Moves and " + score + " Stars in " + timer.stop() + " Secs.\n" +
+            "Woooooo!\n" +
+            "Play again?"
+        );
+        if (again) {
+            resetGame();
+        }
     }
 }
 
