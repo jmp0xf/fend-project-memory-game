@@ -55,12 +55,12 @@ function resetDeck(cardList) {
     var shuffledList = shuffle(cardList);
 
     // Add each card's HTML to the deck node
-    for (var i = 0; i < shuffledList.length; i++) {
+    shuffledList.forEach(function (card) {
         var cardItem = cardBaseItem.cloneNode(true);
-        cardItem.getElementsByTagName("i")[0].className = "fa fa-" + shuffledList[i];
+        cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
         cardItem.onclick = cardClickListener;
         deck.appendChild(cardItem);
-    }
+    });
 }
 
 /*
@@ -79,21 +79,21 @@ function showCard(cardNode) {
 }
 
 function lockCard(cardNodes) {
-    for (var i = 0; i < cardNodes.length; i++) {
-        cardNodes[i].className = "card match";
-    }
+    cardNodes.forEach(function (cardNode) {
+        cardNode.className = "card match";
+    });
 }
 
 function warnCard(cardNodes) {
-    for (var i = 0; i < cardNodes.length; i++) {
-        cardNodes[i].className = "card not-match";
-    }
+    cardNodes.forEach(function (cardNode) {
+        cardNode.className = "card not-match";
+    });
 }
 
 function hideCard(cardNodes) {
-    for (var i = 0; i < cardNodes.length; i++) {
-        cardNodes[i].className = "card";
-    }
+    cardNodes.forEach(function (cardNode) {
+        cardNode.className = "card";
+    });
 }
 
 var openCardList = [];
