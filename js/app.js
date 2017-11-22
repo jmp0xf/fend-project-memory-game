@@ -199,7 +199,7 @@ var ScorePanel = function() {
     this.starNode.className = "fa fa-star";
 };
 
-ScorePanel.prototype.displayScore = function() {
+ScorePanel.prototype.refresh = function() {
     // Clear score panel stars
     this.scorePanelStars.innerHTML = "";
 
@@ -215,7 +215,7 @@ ScorePanel.prototype.reset = function() {
 
 ScorePanel.prototype.updateScore = function(score) {
     this.score = score;
-    this.displayScore();
+    this.refresh();
 };
 
 // Calculate the score in terms of move count
