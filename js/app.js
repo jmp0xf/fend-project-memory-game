@@ -209,6 +209,23 @@ function updateScore(move) {
 }
 
 /*
+ * Timer
+ */
+var Timer = function() {
+    this.reset();
+}
+
+Timer.prototype.reset = function() {
+    this.startTime = Date.now();
+}
+
+Timer.prototype.stop = function() {
+    return (Date.now() - this.startTime) / 1000;
+}
+
+var timer = new Timer();
+
+/*
  * Global game function
  */
 function resetGame() {
