@@ -71,6 +71,23 @@ function resetDeck(cardList) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+
+var moveCounter = document.getElementsByClassName("moves")[0];
+
+function displayMoveCounter() {
+    moveCounter.innerHTML = moveCount;
+}
+
+function resetMoveCounter() {
+    moveCount = 0;
+    displayMoveCounter();
+}
+
+function incMoveCounter() {
+    moveCount++;
+    displayMoveCounter();
+}
+
 function resetGame() {
     resetDeck(cardList);
 }
