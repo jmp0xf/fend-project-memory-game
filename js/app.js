@@ -193,19 +193,22 @@ function incMoveCounter() {
  */
 var ScorePanel = function() {
     this.score = 0;
-    this.scorePanelStars = document.getElementsByClassName("stars")[0];
-    this.listItem = document.createElement("li");
-    this.starNode = document.createElement("i");
-    this.starNode.className = "fa fa-star";
+    this.starsNode = document.getElementsByClassName("stars")[0];
+
+    // Create star icon item
+    this.starItem = document.createElement("li");
+    var starIcon = document.createElement("i");
+    starIcon.className = "fa fa-star";
+    this.starItem.appendChild(starIcon);
 };
 
 ScorePanel.prototype.refresh = function() {
     // Clear score panel stars
-    this.scorePanelStars.innerHTML = "";
+    this.starsNode.innerHTML = "";
 
     // Add each star HTML to the panel
     for (var i=0; i<this.score; i++) {
-        this.scorePanelStars.appendChild(this.starNode.cloneNode(true));
+        this.starsNode.appendChild(this.starItem.cloneNode(true));
     }
 };
 
