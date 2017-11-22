@@ -15,8 +15,6 @@ var CARDS = [
     "bomb"
 ];
 
-var openCardList = [];
-
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -51,9 +49,6 @@ var Deck = function (cards) {
 };
 
 Deck.prototype.reset = function () {
-    // Clear open card list
-    openCardList = [];
-
     // Clear card deck
     this.node.innerHTML = "";
 
@@ -107,8 +102,8 @@ function hideCard(cardNodes) {
 }
 
 function addToOpenList(cardNode) {
-    openCardList.push(cardNode);
-    return openCardList;
+    game.openCardList.push(cardNode);
+    return game.openCardList;
 }
 
 /*
@@ -118,9 +113,9 @@ function addToOpenList(cardNode) {
  *  - hide the two unmatched cards
  */
 function processUnmatchedCards(openList) {
-    var len = openCardList.length;
+    var len = game.openCardList.length;
     var cardNodes = openList.slice(len - 2, len);
-    openCardList = openList.slice(0, len - 2);
+    game.openCardList = openList.slice(0, len - 2);
     highlightCard(cardNodes);
     setTimeout(hideCard, 500, cardNodes);
 }
@@ -263,6 +258,7 @@ Timer.prototype.stop = function () {
  * Game engine
  */
 var Game = function (cards) {
+    this.openCardList = [];
     this.timer = new Timer();
     this.deck = new Deck(cards);
     this.deck.setCardClickListener(cardClickListener);
@@ -271,6 +267,8 @@ var Game = function (cards) {
 };
 
 Game.prototype.reset = function () {
+    // Clear open card list
+    this.openCardList = [];
     this.deck.reset();
     this.moveCounter.reset();
     this.scorePanel.reset();
