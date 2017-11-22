@@ -227,15 +227,15 @@ function updateScore(move) {
  */
 var Timer = function() {
     this.reset();
-}
+};
 
 Timer.prototype.reset = function() {
     this.startTime = Date.now();
-}
+};
 
 Timer.prototype.stop = function() {
     return (Date.now() - this.startTime) / 1000;
-}
+};
 
 var timer = new Timer();
 
