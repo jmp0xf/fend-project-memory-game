@@ -64,10 +64,14 @@ Deck.prototype.reset = function () {
     shuffledList.forEach(function (card) {
         var cardItem = this.cardBaseItem.cloneNode(true);
         cardItem.getElementsByTagName("i")[0].className = "fa fa-" + card;
-        cardItem.onclick = cardClickListener;
+        cardItem.onclick = this.cardClickListener;
         this.node.appendChild(cardItem);
     }.bind(this));
 };
+
+Deck.prototype.setCardClickListener = function (cardClickListener) {
+    this.cardClickListener = cardClickListener;
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -261,6 +265,7 @@ Timer.prototype.stop = function () {
 var Game = function (cards) {
     this.timer = new Timer();
     this.deck = new Deck(cards);
+    this.deck.setCardClickListener(cardClickListener);
     this.scorePanel = new ScorePanel();
     this.moveCounter = new MoveCounter(this.scorePanel);
 };
