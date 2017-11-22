@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * Create a list that holds all of your cards
  */
@@ -10,10 +12,10 @@ var cards = [
     "cube",
     "leaf",
     "bicycle",
-    "bomb",
-]
+    "bomb"
+];
 
-var cardList = cards.concat(cards)
+var cardList = cards.concat(cards);
 
 /*
  * Display the cards on the page
@@ -39,7 +41,7 @@ function shuffle(array) {
 
 function resetDeck(cardList) {
     var deck = document.getElementsByClassName("deck")[0];
-    
+
     // Clear card deck
     deck.innerHTML = "";
 
@@ -94,14 +96,14 @@ function hideCard(cardNodes) {
     }
 }
 
-var openCardList = []
+var openCardList = [];
 
 function addToOpenList(cardNode) {
     openCardList.push(cardNode);
     return openCardList;
 }
 
-/* 
+/*
  * Process the two unmatched cards:
  *  - remove last two cards from open card list
  *  - highlight the two unmatched cards
@@ -109,20 +111,22 @@ function addToOpenList(cardNode) {
  */
 function processUnmatchedCards(openList) {
     var len = openCardList.length;
-    var cards = openList.slice(len - 2, len);
+    var cardNodes = openList.slice(len - 2, len);
     openCardList = openList.slice(0, len - 2);
-    warnCard(cards);
-    setTimeout(hideCard, 500, cards);
+    warnCard(cardNodes);
+    setTimeout(hideCard, 500, cardNodes);
 }
 
 function matchCards(cardNodes) {
-    return cardNodes[0].getElementsByTagName("i")[0].className == cardNodes[1].getElementsByTagName("i")[0].className;
+    return cardNodes[0].getElementsByTagName("i")[0].className === cardNodes[1].getElementsByTagName("i")[0].className;
 
 }
 
 function cardClickListener() {
     // Only process hidden card
-    if (this.className != "card") return;
+    if (this.className !== "card") {
+        return;
+    }
 
     // Display card's symbol
     showCard(this);
@@ -131,18 +135,18 @@ function cardClickListener() {
     var openList = addToOpenList(this);
 
     var len = openList.length;
-    if (len % 2 == 0) {
-        var cards = openList.slice(len - 2, len);
+    if (len % 2 === 0) {
+        var cardNodes = openList.slice(len - 2, len);
 
         // Check if the two cards match
-        if (matchCards(cards)) {
-            lockCard(cards);
+        if (matchCards(cardNodes)) {
+            lockCard(cardNodes);
         } else {
             processUnmatchedCards(openList);
         }
         incMoveCounter();
     }
-    if (openList.length == 16) {
+    if (openList.length === 16) {
         alert("Congratulations! You Won!");
     }
 }
@@ -163,13 +167,13 @@ function resetMoveCounter() {
 }
 
 function incMoveCounter() {
-    moveCount++;
+    moveCount += 1;
     displayMoveCounter();
 }
 
 /*
  * Global game function
- */ 
+ */
 function resetGame() {
     resetDeck(cardList);
     resetMoveCounter();
@@ -184,4 +188,4 @@ resetButton.onclick = resetGame;
 /*
  * Reset the game after document is loaded
  */
-window.onload = resetGame()
+window.onload = resetGame();
