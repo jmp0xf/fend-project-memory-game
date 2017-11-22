@@ -143,7 +143,7 @@ function cardClickListener() {
     var len = openList.length;
 
     // If first card clicked, start the timer
-    if (len == 1) {
+    if (len === 1) {
         game.resetTimer();
     }
 
