@@ -144,7 +144,7 @@ function cardClickListener() {
 
     // If first card clicked, start the timer
     if (len==1) {
-        timer.reset();
+        game.resetTimer();
     }
 
     if (len % 2 === 0) {
@@ -156,17 +156,17 @@ function cardClickListener() {
         } else {
             processUnmatchedCards(openList);
         }
-        moveCounter.incMoveCount();
+        game.incMoveCount();
     }
     if (openList.length === 16) {
         var again = confirm(
             "Congratulations! You Won!\n" +
-            "With " + moveCounter.moveCount + " Moves and " + scorePanel.score + " Stars in " + timer.stop() + " Secs.\n" +
+            "With " + game.getMoveCount() + " Moves and " + game.getScore() + " Stars in " + game.getTime() + " Secs.\n" +
             "Woooooo!\n" +
             "Play again?"
         );
         if (again) {
-            resetGame();
+            game.reset();
         }
     }
 }
@@ -174,9 +174,10 @@ function cardClickListener() {
 /*
  * Move counter
  */
-var MoveCounter = function() {
+var MoveCounter = function(scorePanel) {
     this.moveCount = 0;
     this.movesLabel = document.getElementsByClassName("moves")[0];
+    this.scorePanel = scorePanel;
 };
 
 MoveCounter.prototype.refresh = function() {
@@ -190,14 +191,12 @@ MoveCounter.prototype.reset = function() {
 MoveCounter.prototype.updateMoveCount = function(moveCount) {
     this.moveCount = moveCount;
     this.refresh();
-    scorePanel.calcScore(moveCount);
+    this.scorePanel.calcScore(moveCount);
 };
 
 MoveCounter.prototype.incMoveCount = function() {
     this.updateMoveCount(this.moveCount+1);
 };
-
-var moveCounter = new MoveCounter();
 
 /*
  * Score panel
@@ -243,8 +242,6 @@ ScorePanel.prototype.calcScore = function(move) {
     }
 };
 
-var scorePanel = new ScorePanel();
-
 /*
  * Timer
  */
@@ -260,24 +257,51 @@ Timer.prototype.stop = function() {
     return (Date.now() - this.startTime) / 1000;
 };
 
-var timer = new Timer();
-
 /*
- * Global game function
+ * Game engine
  */
-function resetGame() {
-    deck.reset();
-    moveCounter.reset();
-    scorePanel.reset();
-}
+var Game = function(cards) {
+    this.timer = new Timer();
+    this.deck = new Deck(cards);
+    this.scorePanel = new ScorePanel();
+    this.moveCounter = new MoveCounter(this.scorePanel);
+};
+
+Game.prototype.reset = function() {
+    this.deck.reset();
+    this.moveCounter.reset();
+    this.scorePanel.reset();
+};
+
+Game.prototype.incMoveCount = function() {
+    this.moveCounter.incMoveCount();
+};
+
+Game.prototype.getMoveCount = function() {
+    return this.moveCounter.moveCount;
+};
+
+Game.prototype.getScore = function() {
+    return this.scorePanel.score;
+};
+
+Game.prototype.resetTimer = function() {
+    return this.timer.reset();
+};
+
+Game.prototype.getTime = function() {
+    return this.timer.stop();
+};
+
+var game = new Game(CARDS);
 
 /*
  * Reset button
  */
 var resetButton = document.getElementsByClassName("restart")[0];
-resetButton.onclick = resetGame;
+resetButton.onclick = game.reset.bind(game);
 
 /*
  * Reset the game after document is loaded
  */
-window.onload = resetGame();
+window.onload = game.reset.bind(game);
